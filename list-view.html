@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portland Metro CSA pick-up sites</title>
+    <link rel="stylesheet" href="src/main.css" />
+  </head>
+
+  <body class="list-view calcite-mode-auto">
+    <h1>Portland Metro CSA pick-up sites</h1>
+    <div class="filter-container">
+      <calcite-chip-group
+        placeholder="Select a product"
+        selection-mode="multiple"
+        scale="l"
+      >
+        <calcite-chip
+          scale="l"
+          kind="neutral"
+          value="vegetables"
+          id="vegetables_chip"
+          >🥕</calcite-chip
+        >
+        <calcite-tooltip reference-element="vegetables_chip"
+          >vegetables</calcite-tooltip
+        >
+        <calcite-chip scale="l" kind="neutral" value="fruit" id="fruit_chip"
+          >🍉</calcite-chip
+        >
+        <calcite-tooltip reference-element="fruit_chip">fruit</calcite-tooltip>
+        <calcite-chip scale="l" kind="neutral" value="berries" id="berries_chip"
+          >🫐</calcite-chip
+        >
+        <calcite-tooltip reference-element="berries_chip"
+          >berries</calcite-tooltip
+        >
+        <calcite-chip
+          scale="l"
+          kind="neutral"
+          value="mushrooms"
+          id="mushrooms_chip"
+          >🍄</calcite-chip
+        >
+        <calcite-tooltip reference-element="mushrooms_chip"
+          >mushrooms</calcite-tooltip
+        >
+        <calcite-chip scale="l" kind="neutral" value="eggs" id="eggs_chip"
+          >🥚</calcite-chip
+        >
+        <calcite-tooltip reference-element="eggs_chip">eggs</calcite-tooltip>
+        <calcite-chip scale="l" kind="neutral" value="dairy" id="dairy_chip"
+          >🥛</calcite-chip
+        >
+        <calcite-tooltip reference-element="dairy_chip">dairy</calcite-tooltip>
+        <calcite-chip scale="l" kind="neutral" value="meat" id="meat_chip"
+          >🥩</calcite-chip
+        >
+        <calcite-tooltip reference-element="meat_chip">meat</calcite-tooltip>
+        <calcite-chip scale="l" kind="neutral" value="chicken" id="chicken_chip"
+          >🐓</calcite-chip
+        >
+        <calcite-tooltip reference-element="chicken_chip"
+          >chicken</calcite-tooltip
+        >
+        <calcite-chip scale="l" kind="neutral" value="pork" id="pork_chip"
+          >🐖</calcite-chip
+        >
+        <calcite-tooltip reference-element="pork_chip">pork</calcite-tooltip>
+        <calcite-chip scale="l" kind="neutral" value="fish" id="fish_chip"
+          >🐟</calcite-chip
+        >
+        <calcite-tooltip reference-element="fish_chip">fish</calcite-tooltip>
+        <calcite-chip scale="l" kind="neutral" value="honey" id="honey_chip"
+          >🐝</calcite-chip
+        >
+        <calcite-tooltip reference-element="honey_chip">honey</calcite-tooltip>
+        <calcite-chip scale="l" kind="neutral" value="herbs" id="herbs_chip"
+          >🪴</calcite-chip
+        >
+        <calcite-tooltip reference-element="herbs_chip">herbs</calcite-tooltip>
+        <calcite-chip scale="l" kind="neutral" value="flowers" id="flowers_chip"
+          >🌻</calcite-chip
+        >
+        <calcite-tooltip reference-element="flowers_chip"
+          >flowers</calcite-tooltip
+        >
+        <calcite-chip
+          scale="l"
+          kind="neutral"
+          value="plant_starts"
+          id="plant_starts_chip"
+          >🌱</calcite-chip
+        >
+        <calcite-tooltip reference-element="plant_starts_chip"
+          >plant starts</calcite-tooltip
+        >
+      </calcite-chip-group>
+    </div>
+
+    <div class="card-container"></div>
+
+    <script type="module" src="./src/list-view/list-view.js"></script>
+  </body>
+</html>

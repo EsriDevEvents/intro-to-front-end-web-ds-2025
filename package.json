@@ -10,5 +10,11 @@
   },
   "devDependencies": {
     "vite": "^6.1.0"
+  },
+  "dependencies": {
+    "@arcgis/core": "^4.29.2",
+    "@esri/arcgis-rest-feature-service": "^4.0.5",
+    "@esri/calcite-components": "^2.6.0",
+    "calcite-point-symbols": "github:arcgis/calcite-point-symbols"
   }
 }
