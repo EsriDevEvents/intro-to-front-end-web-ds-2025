@@ -106,6 +106,10 @@ calcite-list-item calcite-chip {
 /* Esri Developer & Technology Summit Demo Template */
 /* Custom styles below */
 
+.esri-feature {
+  padding: 1rem;
+}
+
 .filter-container {
   --calcite-font-size-0: var(--calcite-font-size-2);
   --calcite-color-foreground-2: honeydew;

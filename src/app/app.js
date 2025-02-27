@@ -11,6 +11,7 @@ import { defineCustomElements } from "@esri/calcite-components/dist/loader";
  */
 import esriConfig from "@arcgis/core/config";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
+import * as promiseUtils from "@arcgis/core/core/promiseUtils.js";
 
 /**
  * Map components
@@ -26,9 +27,10 @@ import * as farmBuildingCIMSymbol from "../farm-building-cim-symbol.json";
 
 // Load calcite components
 defineCustomElements(window, {
-  resourcesUrl: "https://js.arcgis.com/calcite-components/2.6.0/assets",
+  resourcesUrl: "https://js.arcgis.com/calcite-components/3.0.3/assets",
 });
 
+// Set up renderer with custom CIMSymbol
 const csaRenderer = {
   type: "simple",
   symbol: {
@@ -40,12 +42,14 @@ const csaRenderer = {
   },
 };
 
+// Configure popup template content
 const csaPopup = {
   title: "{Farm_Name}",
   content:
     "<b>Pickup address: </b>{Location}<br/><br/><a href={Website}>View website</a>",
 };
 
+// Configure the CSA pickups feature layer
 const csaPickupsLayer = new FeatureLayer({
   url: "https://www.portlandmaps.com/od/rest/services/COP_OpenData_ImportantPlaces/MapServer/188",
   renderer: csaRenderer,
@@ -62,45 +66,59 @@ const defaultGraphic = {
 };
 
 mapElement.addEventListener("arcgisViewReadyChange", async (event) => {
-  console.log("MapView ready", event);
+  // Set our API key in esri config to access basemaps service
+  esriConfig.apiKey = import.meta.env.VITE_ARCGIS_API_KEY;
+  mapElement.basemap = "arcgis/community";
+
+  mapElement.highlights = [
+    {
+      name: "default",
+      color: "#B20D30",
+      haloOpacity: 0.75
+    },
+  ];
+
   mapElement.addLayer(csaPickupsLayer);
-
-  feature.graphic = defaultGraphic;
-  
-  mapElement.addEventListener("arcgisViewPointerMove", (event) => {
-    updateFeature();
-  })
-});
-
-const updateFeature = async () => {
+  // include all fields from the service in each feature
   csaPickupsLayer.outFields = ["*"];
 
-
+  // show the default graphic after the map loads (before we set up the hit test)
   feature.graphic = defaultGraphic;
 
-  const layerView = await mapElement.hitTest(event, {
-    include: csaPickupsLayer
-  });
+  // Wait for the layer view to be ready before setting up the hitTest below
+  const layerView = await mapElement.whenLayerView(csaPickupsLayer);
   let highlight, objectId;
 
-  const results = hitTest.results.filter((result) => {
-    return result.graphic.layer.popupTemplate;
+  // Wrap hit test in JS SDK's debounce util to ensure input function isn't invoked more than once at a time: https://developers.arcgis.com/javascript/latest/api-reference/esri-core-promiseUtils.html#debounce
+  const debouncedGraphicUpdate = promiseUtils.debounce(async (event) => {
+    const hitTest = await mapElement.hitTest(event, {
+      include: csaPickupsLayer,
+    });
+
+    const results = hitTest.results.filter((result) => {
+      return result.graphic.layer.popupTemplate;
+    });
+
+    const result = results[0];
+    const newId = result?.graphic.attributes[csaPickupsLayer.objectIdField];
+
+    if (!newId) {
+      highlight?.remove();
+      objectId = feature.graphic = defaultGraphic;
+    } else if (objectId !== newId) {
+      highlight?.remove();
+      objectId = newId;
+      feature.graphic = result.graphic;
+      highlight = layerView.highlight(result.graphic);
+    }
   });
 
-  const result = results[0];
-  const newId = result?.graphic.attributes[csaPickupsLayer.objectIdField];
-
-  if (!newId) {
-    highlight?.remove();
-    objectId = feature.graphic = defaultGraphic;
-  } else if (objectId !== newId) {
-    highlight?.remove();
-    objectId = newId;
-    feature.graphic = result.graphic;
-    highlight = layerView.highlight(result.graphic);
-  }
-}
-
-// Add api key to access basemaps service
-esriConfig.apiKey = import.meta.env.VITE_ARCGIS_API_KEY;
-mapElement.basemap = "arcgis/community";
+  mapElement.addEventListener("arcgisViewPointerMove", (event) => {
+    debouncedGraphicUpdate(event.detail).catch((error) => {
+      // Check if the error is caused by a rejected/aborted promise. If it is not, throw the error
+      if (!promiseUtils.isAbortError(error)) {
+        throw error;
+      }
+    });
+  });
+});
