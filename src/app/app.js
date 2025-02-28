@@ -46,7 +46,7 @@ const csaRenderer = {
 const csaPopup = {
   title: "{Farm_Name}",
   content:
-    "<b>Pickup address: </b>{Location}<br/><br/><a href={Website}>View website</a>",
+    "<b>Pickup address: </b>{Location}<br/><br/><a href={Website}>View website</a><br/><br /> {Main_Products}",
 };
 
 // Configure the CSA pickups feature layer
@@ -86,7 +86,8 @@ mapElement.addEventListener("arcgisViewReadyChange", async (event) => {
   feature.graphic = defaultGraphic;
 
   // Wait for the layer view to be ready before setting up the hitTest below
-  const layerView = await mapElement.whenLayerView(csaPickupsLayer);
+  const csaPickupsLayerView = await mapElement.whenLayerView(csaPickupsLayer);
+
   let highlight, objectId;
 
   // Wrap hit test in JS SDK's debounce util to ensure input function isn't invoked more than once at a time: https://developers.arcgis.com/javascript/latest/api-reference/esri-core-promiseUtils.html#debounce
@@ -109,7 +110,7 @@ mapElement.addEventListener("arcgisViewReadyChange", async (event) => {
       highlight?.remove();
       objectId = newId;
       feature.graphic = result.graphic;
-      highlight = layerView.highlight(result.graphic);
+      highlight = csaPickupsLayerView.highlight(result.graphic);
     }
   });
 
@@ -121,4 +122,19 @@ mapElement.addEventListener("arcgisViewReadyChange", async (event) => {
       }
     });
   });
+
+  document.addEventListener("calciteChipGroupSelect", (e) => {
+    const products = e.target.selectedItems.map((selected) => selected.value);
+    console.log("products", products);
+
+    const featureFilter = {
+      where: "Main_Products LIKE '%" + products.join(", ") + "%'",
+    };
+
+    csaPickupsLayerView.featureEffect = {
+      filter: featureFilter,
+      excludedEffect: "opacity(0%)",
+    };
+    
+  })
 });
