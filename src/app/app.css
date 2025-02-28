@@ -110,6 +110,10 @@ calcite-list-item calcite-chip {
   padding: 1rem;
 }
 
+.popup-chips {
+  list-style-type: none;
+}
+
 .filter-container {
   --calcite-font-size-0: var(--calcite-font-size-2);
   --calcite-color-foreground-2: honeydew;

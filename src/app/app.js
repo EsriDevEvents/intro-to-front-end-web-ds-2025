@@ -25,6 +25,11 @@ import "@arcgis/map-components/components/arcgis-feature";
  */
 import * as farmBuildingCIMSymbol from "../farm-building-cim-symbol.json";
 
+/**
+ * Shared functions from list-view
+ */
+import { normalizeFeatureData, displayCard, categorizeProducts, getChips } from "../list-view/list-view";
+
 // Load calcite components
 defineCustomElements(window, {
   resourcesUrl: "https://js.arcgis.com/calcite-components/3.0.3/assets",
@@ -42,11 +47,16 @@ const csaRenderer = {
   },
 };
 
+function customizePopupContent(feature) {
+  const products = categorizeProducts(feature.graphic.attributes["Main_Products"]);
+  const chips = getChips(products);
+  return `<b>Pickup address: </b>{Location}<br/><br/><a href={Website}>View website</a><ul class="popup-chips">${chips}</ul>`;
+}
 // Configure popup template content
 const csaPopup = {
   title: "{Farm_Name}",
-  content:
-    "<b>Pickup address: </b>{Location}<br/><br/><a href={Website}>View website</a><br/><br /> {Main_Products}",
+  content: customizePopupContent,
+  outFields: "[*]"
 };
 
 // Configure the CSA pickups feature layer
@@ -81,6 +91,21 @@ mapElement.addEventListener("arcgisViewReadyChange", async (event) => {
   mapElement.addLayer(csaPickupsLayer);
   // include all fields from the service in each feature
   csaPickupsLayer.outFields = ["*"];
+
+  const featureSet = await csaPickupsLayer.queryFeatures({
+    where: "Status = 'Active'",
+    returnGeometry: false,
+    outFields: ["OBJECTID", "Farm_Name", "FarmDescript", "Location", "Main_Products", "Website", "email"]
+  });
+
+  const features = normalizeFeatureData(featureSet);
+  const container = document.querySelector(".card-container");
+
+  container.replaceChildren("");
+  features.forEach((feature) => {
+    displayCard(feature);
+  })
+
 
   // show the default graphic after the map loads (before we set up the hit test)
   feature.graphic = defaultGraphic;
@@ -124,17 +149,27 @@ mapElement.addEventListener("arcgisViewReadyChange", async (event) => {
   });
 
   document.addEventListener("calciteChipGroupSelect", (e) => {
-    const products = e.target.selectedItems.map((selected) => selected.value);
-    console.log("products", products);
+    container.replaceChildren("");
+    const productFilter = e.target.selectedItems.map((selected) => selected.value);
 
     const featureFilter = {
-      where: "Main_Products LIKE '%" + products.join(", ") + "%'",
+      where: "Main_Products LIKE '%" + productFilter.join(", ") + "%'"
     };
 
     csaPickupsLayerView.featureEffect = {
       filter: featureFilter,
-      excludedEffect: "opacity(0%)",
+      includedEffect: "bloom(10%)",
+      excludedEffect: "sepia(100%) opacity(30%)",
     };
-    
+
+    features.forEach((feature) => {
+      const isMatch =
+        feature.products.filter((product) =>
+          productFilter.includes(product.replace(" ", "_"))
+        ).length === productFilter.length;
+      if (isMatch) {
+        displayCard(feature);
+      }
+    })
   })
 });
