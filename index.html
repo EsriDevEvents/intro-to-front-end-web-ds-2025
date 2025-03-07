@@ -4,44 +4,137 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Portland CSA Pickup Sites</title>
-    <link rel="stylesheet" href="src/main.css" />
+    <link rel="stylesheet" href="./src/main.css" />
   </head>
 
   <body>
     <calcite-shell>
-      <calcite-shell-panel slot="panel-start">
-        <calcite-panel heading="Portland Metro CSA pick-up sites">
-          <calcite-block heading="Find a site near me" open>
-            <calcite-input
-              id="address"
-              form=""
-              label="home-address"
-              icon="search"
-              placeholder="Enter your address"
-            ></calcite-input>
-            <calcite-label>
-              <calcite-slider
-                id="distance-slider"
-                form=""
-                min="0"
-                max="10"
-                value="5"
-                label-handles
-                label-ticks
-                max-label="10"
-                min-label="0 miles"
-                ticks="5"
-                step="0.5"
-              ></calcite-slider>
-              miles away
-            </calcite-label>
-          </calcite-block>
-        </calcite-panel>
-      </calcite-shell-panel>
+      <calcite-navigation navigation-action slot="header" id="nav">
+        <calcite-navigation-logo href="#" icon="partner" alt="Application logo" slot="logo" heading="Portland CSA Pickup Sites"
+          description="Esri Developer & Technology Summit 2025"></calcite-navigation-logo>
+        <calcite-action-pad layout="horizontal" expand-disabled slot="content-end">
+          <calcite-action id="toggle-mode" text="Toggle mode" icon="brightness"></calcite-action>
+          <calcite-action id="toggle-modal" text="About this application" icon="information"></calcite-action>
+        </calcite-action-pad>
 
-      <div id="viewDiv"></div>
+        <calcite-tooltip placement="bottom" reference-element="toggle-mode" slot="content-end">Toggle
+          mode</calcite-tooltip>
+        <calcite-tooltip placement="bottom" reference-element="toggle-modal" close-on-click slot="content-end">About this
+          application</calcite-tooltip>
+      </calcite-navigation>
+
+      <calcite-panel>
+        <div class="grid-container">
+          <calcite-panel class="panel-map" heading="Portland metro area">
+            <arcgis-map basemap="topo-vector" center="-122.676483, 45.523" zoom="12" popup-disabled>
+              <arcgis-zoom position="top-right"></arcgis-zoom>
+              <arcgis-feature position="bottom-left"></arcgis-feature>
+            </arcgis-map>
+          </calcite-panel>
+          <calcite-panel class="panel-results" heading="Results">
+            <div class="card-container"></div>
+          </calcite-panel>
+
+          <calcite-panel class="panel-start" heading="Find a site">
+            <calcite-action id="toggle-instructions" text="Instructions" icon="information"
+              slot="header-actions-end"></calcite-action>
+            <calcite-tooltip placement="bottom" reference-element="toggle-instructions" slot="header-actions-end">Filter by product to find sites.</calcite-tooltip>
+
+            <calcite-block open collapsible heading="Filter by product" style="--calcite-block-padding: 0">
+              <div class="filter-container">
+                <calcite-chip-group
+                  placeholder="Select a product"
+                  selection-mode="multiple"
+                  scale="l"
+                >
+                  <calcite-chip
+                    scale="l"
+                    kind="neutral"
+                    value="vegetables"
+                    id="vegetables_chip"
+                    >🥕</calcite-chip
+                  >
+                  <calcite-tooltip reference-element="vegetables_chip"
+                    >vegetables</calcite-tooltip
+                  >
+                  <calcite-chip scale="l" kind="neutral" value="fruit" id="fruit_chip"
+                    >🍉</calcite-chip
+                  >
+                  <calcite-tooltip reference-element="fruit_chip">fruit</calcite-tooltip>
+                  <calcite-chip scale="l" kind="neutral" value="berries" id="berries_chip"
+                    >🫐</calcite-chip
+                  >
+                  <calcite-tooltip reference-element="berries_chip"
+                    >berries</calcite-tooltip
+                  >
+                  <calcite-chip
+                    scale="l"
+                    kind="neutral"
+                    value="mushrooms"
+                    id="mushrooms_chip"
+                    >🍄</calcite-chip
+                  >
+                  <calcite-tooltip reference-element="mushrooms_chip"
+                    >mushrooms</calcite-tooltip
+                  >
+                  <calcite-chip scale="l" kind="neutral" value="eggs" id="eggs_chip"
+                    >🥚</calcite-chip
+                  >
+                  <calcite-tooltip reference-element="eggs_chip">eggs</calcite-tooltip>
+                  <calcite-chip scale="l" kind="neutral" value="dairy" id="dairy_chip"
+                    >🥛</calcite-chip
+                  >
+                  <calcite-tooltip reference-element="dairy_chip">dairy</calcite-tooltip>
+                  <calcite-chip scale="l" kind="neutral" value="meat" id="meat_chip"
+                    >🥩</calcite-chip
+                  >
+                  <calcite-tooltip reference-element="meat_chip">meat</calcite-tooltip>
+                  <calcite-chip scale="l" kind="neutral" value="chicken" id="chicken_chip"
+                    >🐓</calcite-chip
+                  >
+                  <calcite-tooltip reference-element="chicken_chip"
+                    >chicken</calcite-tooltip
+                  >
+                  <calcite-chip scale="l" kind="neutral" value="pork" id="pork_chip"
+                    >🐖</calcite-chip
+                  >
+                  <calcite-tooltip reference-element="pork_chip">pork</calcite-tooltip>
+                  <calcite-chip scale="l" kind="neutral" value="fish" id="fish_chip"
+                    >🐟</calcite-chip
+                  >
+                  <calcite-tooltip reference-element="fish_chip">fish</calcite-tooltip>
+                  <calcite-chip scale="l" kind="neutral" value="honey" id="honey_chip"
+                    >🐝</calcite-chip
+                  >
+                  <calcite-tooltip reference-element="honey_chip">honey</calcite-tooltip>
+                  <calcite-chip scale="l" kind="neutral" value="herbs" id="herbs_chip"
+                    >🪴</calcite-chip
+                  >
+                  <calcite-tooltip reference-element="herbs_chip">herbs</calcite-tooltip>
+                  <calcite-chip scale="l" kind="neutral" value="flowers" id="flowers_chip"
+                    >🌻</calcite-chip
+                  >
+                  <calcite-tooltip reference-element="flowers_chip"
+                    >flowers</calcite-tooltip
+                  >
+                  <calcite-chip
+                    scale="l"
+                    kind="neutral"
+                    value="plant_starts"
+                    id="plant_starts_chip"
+                    >🌱</calcite-chip
+                  >
+                  <calcite-tooltip reference-element="plant_starts_chip"
+                    >plant starts</calcite-tooltip
+                  >
+                </calcite-chip-group>
+              </div>
+            </calcite-block>
+
+          </calcite-panel>
+        </div>
+      </calcite-panel>
     </calcite-shell>
-
     <script type="module" src="./src/main.js"></script>
   </body>
 </html>
