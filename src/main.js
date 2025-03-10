@@ -136,7 +136,6 @@ mapElement.addEventListener("arcgisViewReadyChange", async (event) => {
 
   const features = normalizeFeatureData(featureSet);
 
-  container.replaceChildren("");
   features.forEach((feature) => {
     displayCard(feature);
   });
@@ -155,9 +154,7 @@ mapElement.addEventListener("arcgisViewReadyChange", async (event) => {
       include: csaPickupsLayer,
     });
 
-    const results = hitTest.results.filter((result) => {
-      return result.graphic.layer.popupTemplate;
-    });
+    const results = hitTest.results.filter((result) => result.graphic.layer.popupTemplate);
 
     const result = results[0];
     const newId = result?.graphic.attributes[csaPickupsLayer.objectIdField];
