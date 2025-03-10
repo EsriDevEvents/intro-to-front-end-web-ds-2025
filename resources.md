@@ -20,32 +20,33 @@ A collection of doc, links, and resources to learn more about topics covered in 
 - [Eloquent JavaScript](http://eloquentjavascript.net/)
 - [JavaScript 30](https://javascript30.com/)
 
-## Our talk and demos
-### Asynchronous JavaScript
-
+## Asynchronous JavaScript
 - [MDN's intro to asynchronous JavaScript](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous)
 - [How to use JavaScript Promises](https://www.freecodecamp.org/news/javascript-promises-async-await-and-promise-methods/)
 - [JavaScript Enlightenment: Promises](https://frontendmasters.com/guides/javascript-enlightenment/#7)
 - [Events](https://developer.mozilla.org/en-US/docs/Web/API/Event)
 
 
-### Web Components
-
+## Web Components
 - [You guessed it, here's the MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/Web_components)
-- [Stencil](https://stenciljs.com/) - web component library that Calcite Components is written in. 
 
-### CSS
+## CSS
 
-### CSA demo application
+## CSA demo application
 - [Portland Open Data portal](https://gis-pdx.opendata.arcgis.com/)
 - [Vite](https://vitejs.dev/)
+- [ArcGIS Maps SDK for JavaScript map component](https://developers.arcgis.com/javascript/latest/references/map-components/arcgis-map/)
+- [Calcite Components: Chip Group](https://developers.arcgis.com/calcite-design-system/components/chip-group/)
+- [ArcGIS Basemap Styles service](https://developers.arcgis.com/rest/basemap-styles/)
+- [Maps SDK for JavaScript: Querying and Filtering Data](https://developers.arcgis.com/javascript/latest/query-filter/)
 - [Calcite point symbols](https://github.com/Esri/calcite-point-symbols)
 - [Symbol Builder app](https://sagewall.github.io/symbol-builder/)
 - [CIM Symbol Builder blog post](https://www.esri.com/arcgis-blog/products/js-api-arcgis/developers/cim-symbol-builder/)
-- [JavaScript Maps SDK locator: addressToLocations](https://developers.arcgis.com/javascript/latest/api-reference/esri-rest-locator.html#addressToLocations)
-- [JavaScript Maps SDK featureEffect](https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-support-FeatureEffect.html)
+- [hitTest](https://developers.arcgis.com/javascript/latest/api-reference/esri-views-MapView.html#hitTest)
+- [debounce utility](https://developers.arcgis.com/javascript/latest/api-reference/esri-core-promiseUtils.html#debounce)
+- [featureEffect](https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-support-FeatureEffect.html)
 
-### Browser dev tools
+## Browser dev tools
 - [Chrome Developer Tools](https://developers.google.com/web/tools/chrome-devtools/javascript/)
 - [Firefox Developer Tools](https://developer.mozilla.org/en-US/docs/Tools)
 

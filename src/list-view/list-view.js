@@ -13,7 +13,7 @@ defineCustomElements(window, {
   resourcesUrl: "https://js.arcgis.com/calcite-components/2.6.0/assets",
 });
 
-const CATEGORY_MAP = {
+export const CATEGORY_MAP = {
   vegetables: {
     products: ["winter vegetables", "vegggies", "organic vegetables"],
     emoji: "🥕",
@@ -43,7 +43,7 @@ const featureServiceUrl =
   "https://www.portlandmaps.com/od/rest/services/COP_OpenData_ImportantPlaces/MapServer/188";
 
 queryFeatures({ url: featureServiceUrl, where: "Status = 'Active'", returnGeometry: false })
-  .then((layer) => normalizeSiteData(layer))
+  .then((layer) => normalizeFeatureData(layer))
   .then((data) => displayAllCards(data))
   .then((data) => filterResults(data))
   .catch((error) => {
@@ -51,7 +51,7 @@ queryFeatures({ url: featureServiceUrl, where: "Status = 'Active'", returnGeomet
   });
 
 // Maps feature service attributes to simpler data object and converts products to array
-function normalizeSiteData(layer) {
+export function normalizeFeatureData(layer) {
   return layer.features.map((feature) => {
     return {
       farm: feature.attributes["Farm_Name"],
@@ -64,7 +64,7 @@ function normalizeSiteData(layer) {
   });
 }
 
-function categorizeProducts(productString) {
+export function categorizeProducts(productString) {
   const categories = Object.keys(CATEGORY_MAP);
   // Trim any leading or trailing white space and lowercase strings before splitting into an array
   const remapped = productString.trim().toLowerCase().split(", ").map(product => {
@@ -110,7 +110,7 @@ function displayAllCards(sites) {
   return sites;
 }
 
-function displayCard(site) {
+export function displayCard(site) {
   const { farm, address, description, website, email, products } = site;
   const card = `<article class="farm">
   <header>
@@ -129,7 +129,7 @@ function displayCard(site) {
   container.appendChild(cardElement);
 }
 
-function getChips(products) {
+export function getChips(products) {
   const chips = products.map((product) => {
     const content = CATEGORY_MAP[product].emoji;
     return content ? `<li>${content}</li>` : "";
